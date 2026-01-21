@@ -21,7 +21,11 @@ def enviar_mensagem(numero, mensagem):
         "to": numero,
         "body": mensagem
     }
-    requests.post(url, data=payload)
+    headers = {
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+    requests.post(url, data=payload, headers=headers)
+
 
 
 @app.route("/webhook", methods=["POST"])
