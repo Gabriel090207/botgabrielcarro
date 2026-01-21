@@ -15,16 +15,22 @@ app = Flask(__name__)
 
 
 def enviar_mensagem(numero, mensagem):
-    url = f"{ULTRAMSG_BASE_URL}/{ULTRAMSG_INSTANCE_ID}/messages/chat"
+    numero = numero.replace("@c.us", "")
+
+    url = f"{ULTRAMSG_BASE_URL}/instance/{ULTRAMSG_INSTANCE_ID}/messages/chat"
+
     payload = {
         "token": ULTRAMSG_TOKEN,
         "to": numero,
         "body": mensagem
     }
+
     headers = {
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    requests.post(url, data=payload, headers=headers)
+
+    response = requests.post(url, data=payload, headers=headers)
+    print("STATUS ULTRAMSG:", response.status_code, response.text)
 
 
 
