@@ -1,9 +1,9 @@
 import os
+import requests
 from flask import Flask, request
 from dotenv import load_dotenv
-import requests
 
-from app.main import main  # vamos ajustar depois
+from app.main import conversar  # usa o motor real do bot
 
 load_dotenv()
 
@@ -29,23 +29,25 @@ def receber_mensagem():
     data = request.json
     print("WEBHOOK RECEBIDO:", data)
 
-
     try:
-        numero = data.get("from")
-        texto = data.get("body")
+        if data.get("event_type") != "message_received":
+            return "OK", 200
+
+        mensagem_data = data.get("data", {})
+
+        if mensagem_data.get("fromMe"):
+            return "OK", 200
+
+        numero = mensagem_data.get("from")
+        texto = mensagem_data.get("body")
 
         if not numero or not texto:
             return "OK", 200
 
-        # aqui depois vamos chamar o motor do bot
-        resposta = "Recebi sua mensagem 👍"
-
+        resposta = conversar(texto)
         enviar_mensagem(numero, resposta)
 
     except Exception as e:
-        print("Erro:", e)
+        print("ERRO NO WEBHOOK:", e)
 
     return "OK", 200
-
-# Render vai iniciar via Gunicorn
-
