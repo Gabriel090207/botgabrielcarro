@@ -17,7 +17,7 @@ app = Flask(__name__)
 def enviar_mensagem(numero, mensagem):
     numero = numero.replace("@c.us", "")
 
-    url = f"{ULTRAMSG_BASE_URL}/instance/{ULTRAMSG_INSTANCE_ID}/messages/chat"
+    url = f"https://api.ultramsg.com/{ULTRAMSG_INSTANCE_ID}/messages/chat"
 
     payload = {
         "token": ULTRAMSG_TOKEN,
@@ -25,13 +25,8 @@ def enviar_mensagem(numero, mensagem):
         "body": mensagem
     }
 
-    headers = {
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
-
-    response = requests.post(url, data=payload, headers=headers)
-    print("STATUS ULTRAMSG:", response.status_code, response.text)
-
+    response = requests.post(url, data=payload)
+    print("ULTRAMSG RESPONSE:", response.status_code, response.text)
 
 
 @app.route("/webhook", methods=["POST"])
