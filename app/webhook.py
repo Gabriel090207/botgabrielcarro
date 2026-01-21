@@ -42,7 +42,7 @@ def receber_mensagem():
         if mensagem_data.get("fromMe"):
             return "OK", 200
 
-        numero = mensagem_data.get("from")
+        numero = mensagem_data.get("from").replace("@c.us", "")
         texto = mensagem_data.get("body")
 
         if not numero or not texto:
